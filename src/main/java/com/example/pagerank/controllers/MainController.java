@@ -23,26 +23,6 @@ public class MainController {
         return "main2";
     }
 
-//    @GetMapping("/")
-//    public String home(Model model, @RequestParam(required = false, defaultValue = "All", value="type") String type){
-//        Iterable<Post> posts = postRepository.findAll();
-//        model.addAttribute("posts", posts);
-//        if(!type.equals("All")) {
-//            List<Post> foundPosts = new ArrayList<Post>();
-//            for(Post post: posts){
-//                if(post.getType().equals(type)){
-//                    foundPosts.add(post);
-//                }
-//            }
-//            Iterable<Post> iterable = foundPosts;
-//            model.addAttribute("posts", iterable);
-//        }
-//        List<String> types = new LocalData().types;
-//        model.addAttribute("types", types);
-//        model.addAttribute("selectedType", type);
-//        return "allnews2";
-//    }
-
     @GetMapping("/opinions")
     public String opinions(Model model) {
         return "opinions2";

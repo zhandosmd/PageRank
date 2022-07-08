@@ -9,13 +9,14 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-public class Post { // model
+public class Post { // model, Lost And Found model
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String title, place, description;
     private String type;
     private int views;
+    private double rank;
     @Column(nullable = true, length = 64)
     private String photos;
     @ElementCollection

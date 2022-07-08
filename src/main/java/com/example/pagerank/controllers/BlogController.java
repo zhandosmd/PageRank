@@ -13,9 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 public class BlogController {
@@ -23,9 +21,21 @@ public class BlogController {
     @Autowired
     private PostRepository postRepository;
 
-    @GetMapping("/allnews")
-    public String allnews(Model model, @RequestParam(required = false, defaultValue = "All", value="type") String type){
-        Iterable<Post> posts = postRepository.findAll();
+    @RequestMapping(path = {"/allnews", "/search"})
+    public String allnews(Model model,
+              @RequestParam(required = false, defaultValue = "All", value="type") String type,
+              @RequestParam(required = false, defaultValue = "All", value="keyword") String keyword){
+        List<Post> posts = new ArrayList<>();
+        if(!keyword.equals("All")){
+            for (Post lofo: LocalData.LoFoItems){
+                if(lofo.getTitle().toLowerCase().contains(keyword.toLowerCase())){
+                    posts.add(lofo);
+                }
+            }
+        }else{
+            posts.addAll(LocalData.LoFoItems);
+        }
+        posts.sort(Comparator.comparing(Post::getRank).reversed());
         model.addAttribute("posts", posts);
         if(!type.equals("All")) {
             List<Post> foundPosts = new ArrayList<Post>();
@@ -40,6 +50,17 @@ public class BlogController {
         List<String> types = new LocalData().types;
         model.addAttribute("types", types);
         model.addAttribute("selectedType", type);
+        return "allnews2";
+    }
+
+    @GetMapping("/allnews/{query}")
+    public String allnewsquery(Model model, @PathVariable(value = "query") String query){
+        Iterable<Post> posts = postRepository.findAll();
+        model.addAttribute("posts", posts);
+
+        List<String> types = new LocalData().types;
+        model.addAttribute("types", types);
+        model.addAttribute("selectedType","All");
         return "allnews2";
     }
 
